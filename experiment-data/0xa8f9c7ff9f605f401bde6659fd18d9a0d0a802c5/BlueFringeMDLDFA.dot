@@ -1,0 +1,14 @@
+digraph g {
+
+	s0 [shape="doublecircle" label="0"];
+	s1 [shape="doublecircle" label="1"];
+	s2 [shape="doublecircle" label="2"];
+	s0 -> s2 [label="createGame"];
+	s2 -> s2 [label="joinGame"];
+	s2 -> s1 [label="reveal"];
+	s2 -> s1 [label="close"];
+
+__start0 [label="" shape="none" width="0" height="0"];
+__start0 -> s0;
+
+}

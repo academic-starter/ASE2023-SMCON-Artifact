@@ -1,0 +1,69 @@
+[
+    { 
+        "function": "setInitialOwner",
+        "abstract-types": ["uint256-punkIndex"],
+        "params": ["punkIndex"], 
+        "state": ["punkIndexToAddress[uint256-punkIndex]", "punksOfferedForSale[uint256-punkIndex]", "punkBids[uint256-punkIndex]"]
+    },
+    { 
+        "function": "setInitialOwners",
+        "abstract-types": ["uint256-punkIndex"],
+        "params": ["indices"], 
+        "isArray": true,
+        "state": ["punkIndexToAddress[uint256-punkIndex]", "punksOfferedForSale[uint256-punkIndex]", "punkBids[uint256-punkIndex]"] 
+    },
+    { 
+        "function": "getPunk",
+        "abstract-types": ["uint256-punkIndex"],
+        "params": ["punkIndex"], 
+        "state": ["punkIndexToAddress[uint256-punkIndex]", "punksOfferedForSale[uint256-punkIndex]", "punkBids[uint256-punkIndex]"]
+    },
+    { 
+        "function": "transferPunk",
+        "abstract-types": ["uint256-punkIndex"],
+        "params": ["punkIndex"], 
+        "state": ["punkIndexToAddress[uint256-punkIndex]", "punksOfferedForSale[uint256-punkIndex]", "punkBids[uint256-punkIndex]"]
+    },
+    { 
+        "function": "punkNoLongerForSale",
+        "abstract-types": ["uint256-punkIndex"],
+        "params": ["punkIndex"], 
+        "state": ["punkIndexToAddress[uint256-punkIndex]", "punksOfferedForSale[uint256-punkIndex]", "punkBids[uint256-punkIndex]"]
+    },
+    { 
+        "function": "offerPunkForSale",
+        "abstract-types": ["uint256-punkIndex"],
+        "params": ["punkIndex"], 
+        "state": ["punkIndexToAddress[uint256-punkIndex]", "punksOfferedForSale[uint256-punkIndex]", "punkBids[uint256-punkIndex]"]
+    },
+    { 
+        "function": "offerPunkForSaleToAddress",
+        "abstract-types": ["uint256-punkIndex"],
+        "params": ["punkIndex"], 
+        "state": ["punkIndexToAddress[uint256-punkIndex]", "punksOfferedForSale[uint256-punkIndex]", "punkBids[uint256-punkIndex]"]
+    },
+    { 
+        "function": "buyPunk",
+        "abstract-types": ["uint256-punkIndex"],
+        "params": ["punkIndex"], 
+        "state": ["punkIndexToAddress[uint256-punkIndex]", "punksOfferedForSale[uint256-punkIndex]", "punkBids[uint256-punkIndex]"]
+    },
+    { 
+        "function": "enterBidForPunk",
+        "abstract-types": ["uint256-punkIndex"],
+        "params": ["punkIndex"], 
+        "state": ["punkIndexToAddress[uint256-punkIndex]", "punksOfferedForSale[uint256-punkIndex]", "punkBids[uint256-punkIndex]"]
+    },
+    { 
+        "function": "acceptBidForPunk",
+        "abstract-types": ["uint256-punkIndex"],
+        "params": ["punkIndex"], 
+        "state": ["punkIndexToAddress[uint256-punkIndex]", "punksOfferedForSale[uint256-punkIndex]", "punkBids[uint256-punkIndex]"]
+    },
+    { 
+        "function": "withdrawBidForPunk",
+        "abstract-types": ["uint256-punkIndex"],
+        "params": ["punkIndex"], 
+        "state": ["punkIndexToAddress[uint256-punkIndex]", "punksOfferedForSale[uint256-punkIndex]", "punkBids[uint256-punkIndex]"]
+    }
+]

@@ -1,0 +1,40 @@
+[
+    { 
+        "function": "createAuction",
+        "sizeofparams": 6, 
+        "abstract-types": ["address-NFT","uint256-tokenId"],
+        "params": ["_nftAddress", "_tokenId"], 
+        "state": ["nftToTokenIdToAuction[address-NFT][uint256-tokenId]"]
+    },
+    { 
+        "function": "bid",
+        "abstract-types": ["address-NFT","uint256-tokenId"],
+        "params": ["_nftAddress", "_tokenId"], 
+        "state": ["nftToTokenIdToAuction[address-NFT][uint256-tokenId]"]
+    },
+    { 
+        "function": "cancelAuction",
+        "abstract-types": ["address-NFT","uint256-tokenId"],
+        "params": ["_nftAddress", "_tokenId"], 
+        "state": ["nftToTokenIdToAuction[address-NFT][uint256-tokenId]"]
+    },
+    { 
+        "function": "cancelAuctionWhenPaused",
+        "abstract-types": ["address-NFT","uint256-tokenId"],
+        "params": ["_nftAddress", "_tokenId"], 
+        "state": ["nftToTokenIdToAuction[address-NFT][uint256-tokenId]"]
+    },
+    { 
+        "function": "createAuction",
+        "sizeofparams": 5, 
+        "abstract-types": ["address-NFT","uint256-tokenId"],
+        "params": ["_nftAddress", "_tokenId"], 
+        "state": ["nftToTokenIdToAuction[address-NFT][uint256-tokenId]"]
+    },
+    { 
+        "function": "bid",
+        "abstract-types": ["address-NFT","uint256-tokenId"],
+        "params": ["_nftAddress", "_tokenId"], 
+        "state": ["nftToTokenIdToAuction[address-NFT][uint256-tokenId]"]
+    }
+]

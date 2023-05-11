@@ -1,0 +1,61 @@
+{
+    "website": "https://dicether.com/",
+    "git-repo": "https://github.com/dicether/contracts",
+    "test-cases": "https://github.com/dicether/contracts/tree/master/test/",
+    "statemachine": {
+        "0": {
+            "createGame": "1"
+        },
+        "1": {
+            "userCancelActiveGame": "2",
+            "serverCancelActiveGame": "3",
+            "userEndGameConflict": "4",
+            "serverEndGameConflict": "5",
+            "serverEndGame": "6",
+            "userEndGame": "6"
+        },
+        "2": {
+            "serverCancelActiveGame": "6",
+            "serverEndGameConflict": "6",
+            "userForceGameEnd": "6"
+        },
+        "3": {
+            "userCancelActiveGame": "6",
+            "userEndGameConflict": "6",
+            "serverForceGameEnd": "6"
+        },
+        "4": {
+            "serverEndGameConflict": "6",
+            "userForceGameEnd": "6"
+        },
+        "5": {
+            "userEndGameConflict": "6",
+            "serverForceGameEnd": "6"
+        },
+        "6": {}
+    },
+    "test-case-traces": {
+        "createGame": {
+            "serverEndGame": {},
+            "userCancelActiveGame": {
+                "serverCancelActiveGame": {},
+                "serverEndGameConflict": {},
+                "userForceGameEnd": {}
+            },
+            "userEndGame": {},
+            "serverCancelActiveGame": {
+                "userCancelActiveGame": {},
+                "userEndGameConflict": {},
+                "serverForceGameEnd": {}
+            },
+            "serverEndGameConflict": {
+                "userEndGameConflict": {},
+                "serverForceGameEnd": {}
+            },
+            "userEndGameConflict": {
+                "serverEndGameConflict": {},
+                "userForceGameEnd": {}
+            }
+        }
+    }
+}

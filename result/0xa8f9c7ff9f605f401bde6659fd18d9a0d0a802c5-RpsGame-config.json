@@ -1,0 +1,26 @@
+[
+    { 
+     "function": "createGame",
+     "abstract-types": ["uint256-gameId"],
+     "params": ["maxgame"], 
+     "state": ["games[uint256-gameId]"]
+    },
+    { 
+     "function": "joinGame",
+     "abstract-types": ["uint256-gameId"],
+     "params": ["gameid"], 
+     "state": ["games[uint256-gameId]"]
+    },
+    { 
+     "function": "reveal",
+     "abstract-types": ["uint256-gameId"],
+     "params": ["gameid"],
+     "state": ["games[uint256-gameId]"]
+    },
+    { 
+     "function": "close",
+     "abstract-types": ["uint256-gameId"],
+     "params": ["gameid"],
+     "state": ["games[uint256-gameId]"]
+    }
+]

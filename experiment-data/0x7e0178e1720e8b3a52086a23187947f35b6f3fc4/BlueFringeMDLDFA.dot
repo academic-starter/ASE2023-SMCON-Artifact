@@ -1,0 +1,20 @@
+digraph g {
+
+	s0 [shape="doublecircle" label="0"];
+	s1 [shape="doublecircle" label="1"];
+	s2 [shape="doublecircle" label="2"];
+	s3 [shape="doublecircle" label="3"];
+	s4 [shape="doublecircle" label="4"];
+	s0 -> s1 [label="serverForceGameEnd"];
+	s2 -> s3 [label="createGame"];
+	s3 -> s3 [label="serverCancelActiveGame"];
+	s3 -> s1 [label="serverForceGameEnd"];
+	s3 -> s1 [label="serverEndGame"];
+	s3 -> s0 [label="serverEndGameConflict"];
+	s3 -> s4 [label="userCancelActiveGame"];
+	s4 -> s1 [label="serverCancelActiveGame"];
+
+__start0 [label="" shape="none" width="0" height="0"];
+__start0 -> s2;
+
+}

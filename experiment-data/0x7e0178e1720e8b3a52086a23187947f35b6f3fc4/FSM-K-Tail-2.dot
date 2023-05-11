@@ -1,0 +1,25 @@
+digraph {
+	ranksep=0.5 size="8, 8"
+	rankdir=LR
+	Initial [label="" fontsize=14.0 shape=point]
+	0 [fontsize=14.0 shape=doublecircle]
+	1 [fontsize=14.0 shape=doublecircle]
+	2 [fontsize=14.0 shape=doublecircle]
+	3 [fontsize=14.0 shape=doublecircle]
+	4 [fontsize=14.0 shape=doublecircle]
+	5 [fontsize=14.0 shape=doublecircle]
+	6 [fontsize=14.0 shape=doublecircle]
+	7 [fontsize=14.0 shape=doublecircle]
+	8 [fontsize=14.0 shape=doublecircle]
+	9 [fontsize=14.0 shape=doublecircle]
+	Initial -> 0 [arrowsize=0.85]
+	0 -> 1 [label=" createGame " arrowsize=0.85 fontsize=14.0]
+	1 -> 9 [label=" serverEndGame " arrowsize=0.85 fontsize=14.0]
+	1 -> 7 [label=" serverEndGameConflict " arrowsize=0.85 fontsize=14.0]
+	1 -> 4 [label=" serverCancelActiveGame " arrowsize=0.85 fontsize=14.0]
+	1 -> 2 [label=" userCancelActiveGame " arrowsize=0.85 fontsize=14.0]
+	2 -> 3 [label=" serverCancelActiveGame " arrowsize=0.85 fontsize=14.0]
+	4 -> 6 [label=" serverForceGameEnd " arrowsize=0.85 fontsize=14.0]
+	4 -> 5 [label=" userCancelActiveGame " arrowsize=0.85 fontsize=14.0]
+	7 -> 8 [label=" serverForceGameEnd " arrowsize=0.85 fontsize=14.0]
+}

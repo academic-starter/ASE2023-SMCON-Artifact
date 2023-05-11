@@ -1,0 +1,63 @@
+[
+    { 
+        "function": "transfer",
+        "abstract-types": ["uint256-tokenId"],
+        "params": ["_tokenId"], 
+        "state": ["tokenOwner[uint256-tokenId]", "tokenApprovals[uint256-tokenId]", "tokenBidder[uint256-tokenId]", "tokenCurrentBid[uint256-tokenId]", "tokenBidder[uint256-tokenId]", "tokenSalePrice[uint256-tokenId]", "tokenCreator[uint256-tokenId]","tokenToURI[uint256-tokenId]" ,"tokenSold[uint256-tokenId]"]
+    },
+    { 
+        "function": "approve",
+        "abstract-types": ["uint256-tokenId"],
+        "params": ["_tokenId"], 
+        "state": ["tokenOwner[uint256-tokenId]", "tokenApprovals[uint256-tokenId]", "tokenBidder[uint256-tokenId]", "tokenCurrentBid[uint256-tokenId]", "tokenBidder[uint256-tokenId]", "tokenSalePrice[uint256-tokenId]", "tokenCreator[uint256-tokenId]","tokenToURI[uint256-tokenId]" ,"tokenSold[uint256-tokenId]"]
+    },
+    { 
+        "function": "takeOwnership",
+        "abstract-types": ["uint256-tokenId"],
+        "params": ["_tokenId"], 
+        "state": ["tokenOwner[uint256-tokenId]", "tokenApprovals[uint256-tokenId]", "tokenBidder[uint256-tokenId]", "tokenCurrentBid[uint256-tokenId]", "tokenBidder[uint256-tokenId]", "tokenSalePrice[uint256-tokenId]", "tokenCreator[uint256-tokenId]","tokenToURI[uint256-tokenId]" ,"tokenSold[uint256-tokenId]"]
+    },
+    { 
+        "function": "addNewToken",
+        "abstract-types": ["uint256-tokenId"],
+        "params": ["uriOriginalToken[_uri]"], 
+        "state": ["tokenOwner[uint256-tokenId]", "tokenApprovals[uint256-tokenId]", "tokenBidder[uint256-tokenId]", "tokenCurrentBid[uint256-tokenId]", "tokenBidder[uint256-tokenId]", "tokenSalePrice[uint256-tokenId]", "tokenCreator[uint256-tokenId]","tokenToURI[uint256-tokenId]" ,"tokenSold[uint256-tokenId]"]
+    },
+    { 
+        "function": "addNewTokenWithEditions",
+        "abstract-types": ["uint256-tokenId"],
+        "params": ["uriOriginalToken[_uri]"], 
+        "valueoffset":[0, "_editions+1"],
+        "state": ["tokenOwner[uint256-tokenId]", "tokenApprovals[uint256-tokenId]", "tokenBidder[uint256-tokenId]", "tokenCurrentBid[uint256-tokenId]", "tokenBidder[uint256-tokenId]", "tokenSalePrice[uint256-tokenId]", "tokenCreator[uint256-tokenId]","tokenToURI[uint256-tokenId]" ,"tokenSold[uint256-tokenId]"]
+    },
+    { 
+        "function": "bid",
+        "abstract-types": ["uint256-tokenId"],
+        "params": ["_tokenId"], 
+        "state": ["tokenOwner[uint256-tokenId]", "tokenApprovals[uint256-tokenId]", "tokenBidder[uint256-tokenId]", "tokenCurrentBid[uint256-tokenId]", "tokenBidder[uint256-tokenId]", "tokenSalePrice[uint256-tokenId]", "tokenCreator[uint256-tokenId]","tokenToURI[uint256-tokenId]" ,"tokenSold[uint256-tokenId]"]
+    },
+    { 
+        "function": "acceptBid",
+        "abstract-types": ["uint256-tokenId"],
+        "params": ["_tokenId"], 
+        "state": ["tokenOwner[uint256-tokenId]", "tokenApprovals[uint256-tokenId]", "tokenBidder[uint256-tokenId]", "tokenCurrentBid[uint256-tokenId]", "tokenBidder[uint256-tokenId]", "tokenSalePrice[uint256-tokenId]", "tokenCreator[uint256-tokenId]","tokenToURI[uint256-tokenId]" ,"tokenSold[uint256-tokenId]"]
+    },
+    { 
+        "function": "cancelBid",
+        "abstract-types": ["uint256-tokenId"],
+        "params": ["_tokenId"], 
+        "state": ["tokenOwner[uint256-tokenId]", "tokenApprovals[uint256-tokenId]", "tokenBidder[uint256-tokenId]", "tokenCurrentBid[uint256-tokenId]", "tokenBidder[uint256-tokenId]", "tokenSalePrice[uint256-tokenId]", "tokenCreator[uint256-tokenId]","tokenToURI[uint256-tokenId]" ,"tokenSold[uint256-tokenId]"]
+    },
+    { 
+        "function": "buy",
+        "abstract-types": ["uint256-tokenId"],
+        "params": ["_tokenId"], 
+        "state": ["tokenOwner[uint256-tokenId]", "tokenApprovals[uint256-tokenId]", "tokenBidder[uint256-tokenId]", "tokenCurrentBid[uint256-tokenId]", "tokenBidder[uint256-tokenId]", "tokenSalePrice[uint256-tokenId]", "tokenCreator[uint256-tokenId]","tokenToURI[uint256-tokenId]" ,"tokenSold[uint256-tokenId]"]
+    },
+    { 
+        "function": "setSalePrice",
+        "abstract-types": ["uint256-tokenId"],
+        "params": ["_tokenId"], 
+        "state": ["tokenOwner[uint256-tokenId]", "tokenApprovals[uint256-tokenId]", "tokenBidder[uint256-tokenId]", "tokenCurrentBid[uint256-tokenId]", "tokenBidder[uint256-tokenId]", "tokenSalePrice[uint256-tokenId]", "tokenCreator[uint256-tokenId]","tokenToURI[uint256-tokenId]" ,"tokenSold[uint256-tokenId]"]
+    }
+]

@@ -1,0 +1,143 @@
+{
+    "website": "https://mooncatrescue.com/",
+    "git-repo": "https://github.com/ponderware/MoonCatRescue-Contract",
+    "test-cases": "https://github.com/ponderware/MoonCatRescue-Contract/blob/master/test/rescuedcats.js",
+    "statemachine":{
+        "0":{
+            "rescueCat": "1",
+            "addGenesisCatGroup":"9"
+        },
+        "1":{
+            "nameCat": "5",
+            "giveCat": "1",
+            "makeAdoptionOffer": "2",
+            "makeAdoptionOfferToAddress":"2",
+            "cancelAdoptionOffer": "1",
+            "makeAdoptionRequest": "3",
+            "addGenesisCatGroup":"9"
+        },
+        "2":{
+            "nameCat": "6",
+            "giveCat": "1",
+            "acceptAdoptionOffer": "1",
+            "makeAdoptionRequest": "4",
+            "cancelAdoptionOffer": "1",
+            "makeAdoptionOfferToAddress": "2",
+            "makeAdoptionOffer": "2",
+            "addGenesisCatGroup": "2"
+        },
+        "3":{
+            "nameCat": "7",
+            "giveCat": ["3", "1"],
+            "acceptAdoptionRequest": "1",
+            "cancelAdoptionRequest":"1",
+            "makeAdoptionRequest": "3",
+            "makeAdoptionOfferToAddress": "4",
+            "makeAdoptionOffer": "4",
+            "cancelAdoptionOffer": "3"
+        },
+        "4":{
+            "nameCat": "8",
+            "giveCat": ["3", "1"],
+            "acceptAdoptionRequest":"2",
+            "cancelAdoptionRequest":"2",
+            "acceptAdoptionOffer": "3",
+            "cancelAdoptionOffer": "3",
+            "makeAdoptionRequest": "4",
+            "makeAdoptionOfferToAddress": "4",
+            "makeAdoptionOffer": "4"
+        },
+        "5":{
+            "giveCat": "5",
+            "cancelAdoptionOffer": "5",
+            "makeAdoptionRequest": "7",
+            "makeAdoptionOfferToAddress":"6",
+            "makeAdoptionOffer": "6"
+        },
+        "6":{
+            "giveCat": "6",
+            "acceptAdoptionOffer": "5",
+            "makeAdoptionRequest": "8",
+            "cancelAdoptionOffer": "5",
+            "makeAdoptionOfferToAddress":"6",
+            "makeAdoptionOffer": "6"
+        },
+        "7":{
+            "giveCat": ["7", "5"],
+            "acceptAdoptionRequest": "5",
+            "cancelAdoptionRequest":"5",
+            "makeAdoptionRequest": "7",
+            "makeAdoptionOfferToAddress": "8",
+            "makeAdoptionOffer": "8",
+            "cancelAdoptionOffer": "7"
+        },
+        "8":{
+            "giveCat": ["7", "5"],
+            "acceptAdoptionRequest":"6",
+            "cancelAdoptionRequest":"6",
+            "acceptAdoptionOffer": "7",
+            "cancelAdoptionOffer": "7",
+            "makeAdoptionRequest": "8",
+            "makeAdoptionOffer": "8"
+        },
+        "9":{
+            "acceptAdoptionOffer":"1",
+            "rescueCat": "2", 
+            "addGenesisCatGroup": "9"
+        }
+    },
+    "test-case-traces":{
+        "rescueCat": {
+            "makeAdoptionOffer": {
+                "acceptAdoptionOffer": {
+                    "makeAdoptionOffer": {
+                        "acceptAdoptionOffer": {}
+                    }
+                },
+                "cancelAdoptionOffer": {
+                        "makeAdoptionRequest": {
+                            "makeAdoptionRequest": {
+                                "acceptAdoptionRequest": {}
+                            },
+                            "cancelAdoptionRequest": {}
+                        }
+                }
+            },
+            "giveCat": {
+                "makeAdoptionOffer": {
+                    "giveCat": {
+                        "makeAdoptionRequest": {
+                            "giveCat": {
+                                "makeAdoptionRequest": {
+                                    "giveCat": {
+                                        "makeAdoptionOffer": {
+                                            "makeAdoptionRequest": {
+                                                "acceptAdoptionOffer": {
+                                                    "makeAdoptionOffer": {
+                                                        "makeAdoptionRequest": {
+                                                            "acceptAdoptionRequest": {
+                                                                "makeAdoptionOffer": {
+                                                                    "makeAdoptionRequest": {
+                                                                        "acceptAdoptionOffer": {}
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "nameCat": {
+                "makeAdoptionOffer": {}
+            }
+        }
+    }
+   
+}

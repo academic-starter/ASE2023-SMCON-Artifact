@@ -1,0 +1,65 @@
+{
+    "createGame@userGameId[msg.sender]": [
+        "gameIdGame_stake == 0",
+        "gameIdGame_roundId == 0",
+        "gameIdGame_status == 0",
+        "gameIdGame_endInitiatedTime == 0",
+        "gameIdGame_betValue == 0",
+        "gameIdGame_gameType == 0",
+        "gameIdGame_balance == 0",
+        "gameIdGame_serverSeed == \"\"",
+        "gameIdGame_betNum == 0",
+        "gameIdGame_userSeed == \"\""
+    ],
+    "serverEndGame@userGameId[_userAddress]": [
+        "gameIdGame_roundId == 0",
+        "gameIdGame_endInitiatedTime == 0",
+        "gameIdGame_stake one of [10000000000000000,20000000000000000,30000000000000000,40000000000000000,1000000000000000000,50000000000000000,100000000000000000,2000000000000000000,200000000000000000]",
+        "gameIdGame_betValue == 0",
+        "gameIdGame_stake > 0",
+        "gameIdGame_gameType == 0",
+        "gameIdGame_balance == 0",
+        "gameIdGame_serverSeed == \"\"",
+        "gameIdGame_betNum == 0",
+        "gameIdGame_status == 1",
+        "gameIdGame_userSeed == \"\""
+    ],
+    "serverCancelActiveGame@userGameId[_userAddress]": [
+        "gameIdGame_stake one of [30000000000000000,20000000000000000,10000000000000000]",
+        "gameIdGame_roundId == 0",
+        "gameIdGame_endInitiatedTime == 0",
+        "gameIdGame_betValue == 0",
+        "gameIdGame_stake > 0",
+        "gameIdGame_gameType == 0",
+        "gameIdGame_balance == 0",
+        "gameIdGame_serverSeed == \"\"",
+        "gameIdGame_betNum == 0",
+        "gameIdGame_status == 1",
+        "gameIdGame_userSeed == \"\""
+    ],
+    "serverForceGameEnd@userGameId[_userAddress]": [
+        "gameIdGame_balance one of [0,128000000000000,752000000000000,115792089237316195423570985008687907853269984665640564039457583998313129639936,115792089237316195423570985008687907853269984665640564039457582727913129639936]",
+        "gameIdGame_stake one of [20000000000000000,30000000000000000,120000000000000000,40000000000000000]",
+        "gameIdGame_betNum one of [0,1,50]",
+        "gameIdGame_roundId one of [0,2,3,7,20]",
+        "gameIdGame_endInitiatedTime > 0",
+        "gameIdGame_gameType one of [0,1,4]",
+        "gameIdGame_betValue one of [320000000000000,0,400000000000000,1280000000000000]",
+        "gameIdGame_stake > 0",
+        "gameIdGame_endInitiatedTime one of [1549944071,1549814475,1549933196,1549918800,1549843219,1550106015]",
+        "gameIdGame_status == 3"
+    ],
+    "serverEndGameConflict@userGameId[_userAddress]": [
+        "gameIdGame_roundId == 0",
+        "gameIdGame_stake one of [20000000000000000,120000000000000000,10000000000000000,30000000000000000,40000000000000000]",
+        "gameIdGame_endInitiatedTime == 0",
+        "gameIdGame_betValue == 0",
+        "gameIdGame_stake > 0",
+        "gameIdGame_gameType == 0",
+        "gameIdGame_balance == 0",
+        "gameIdGame_serverSeed == \"\"",
+        "gameIdGame_betNum == 0",
+        "gameIdGame_status == 1",
+        "gameIdGame_userSeed == \"\""
+    ]
+}

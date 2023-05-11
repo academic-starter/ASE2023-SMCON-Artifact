@@ -1,0 +1,22 @@
+digraph g {
+
+	s0 [shape="doublecircle" label="0"];
+	s1 [shape="doublecircle" label="1"];
+	s2 [shape="doublecircle" label="2"];
+	s3 [shape="doublecircle" label="3"];
+	s4 [shape="doublecircle" label="4"];
+	s0 -> s1 [label="serverEndGameConflict"];
+	s2 -> s2 [label="serverCancelActiveGame"];
+	s2 -> s1 [label="serverForceGameEnd"];
+	s2 -> s1 [label="serverEndGame"];
+	s2 -> s4 [label="serverEndGameConflict"];
+	s2 -> s0 [label="userEndGameConflict"];
+	s2 -> s1 [label="userCancelActiveGame"];
+	s3 -> s2 [label="createGame"];
+	s4 -> s1 [label="serverForceGameEnd"];
+	s4 -> s2 [label="userEndGameConflict"];
+
+__start0 [label="" shape="none" width="0" height="0"];
+__start0 -> s3;
+
+}

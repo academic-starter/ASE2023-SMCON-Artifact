@@ -1,0 +1,19 @@
+{
+    "git-repo": "unknown",
+    "test-case": "unknown",
+    "statemachine": {
+        "0": {
+            "createGame": "1"
+        },
+        "1": {
+            "joinGame": "2",
+            "close": "3"
+        },
+        "2": {
+            "reveal": "3",
+            "close": "3"
+        },
+        "3": {}
+    },
+    "test-case-traces": {}
+}

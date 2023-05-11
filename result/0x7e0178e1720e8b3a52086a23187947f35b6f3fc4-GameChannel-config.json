@@ -1,0 +1,50 @@
+[
+    { 
+     "function": "createGame",
+     "abstract-types": ["uint256-gameId"],
+     "params": ["userGameId[msg.sender]"], 
+     "state": ["gameIdGame[uint256-gameId]"]
+    },
+    { 
+     "function": "serverEndGame",
+     "abstract-types": ["uint256-gameId"],
+     "params": ["userGameId[_userAddress]"], 
+     "state": ["gameIdGame[uint256-gameId]"]
+    },
+    { 
+     "function": "userCancelActiveGame",
+     "abstract-types": ["uint256-gameId"],
+     "params": ["userGameId[msg.sender]"],
+     "state": ["gameIdGame[uint256-gameId]"]
+    },
+    { 
+     "function": "serverCancelActiveGame",
+     "abstract-types": ["uint256-gameId"],
+     "params": ["userGameId[_userAddress]"],
+     "state": ["gameIdGame[uint256-gameId]"]
+    },
+    { 
+     "function": "serverForceGameEnd",
+     "abstract-types": ["uint256-gameId"],
+     "params": ["userGameId[_userAddress]"],
+     "state": ["gameIdGame[uint256-gameId]"]
+    },
+    { 
+     "function": "userForceGameEnd",
+     "abstract-types": ["uint256-gameId"],
+     "params": ["userGameId[msg.sender]"],
+     "state": ["gameIdGame[uint256-gameId]"]
+    },
+    { 
+     "function": "userEndGameConflict",
+     "abstract-types": ["uint256-gameId"],
+     "params": ["userGameId[msg.sender]"],
+     "state": ["gameIdGame[uint256-gameId]"]
+    },
+    { 
+     "function": "serverEndGameConflict",
+     "abstract-types": ["uint256-gameId"],
+     "params": ["userGameId[_userAddress]"],
+     "state": ["gameIdGame[uint256-gameId]"]
+    }
+]

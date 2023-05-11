@@ -1,0 +1,23 @@
+digraph g {
+
+	s0 [shape="doublecircle" label="0"];
+	s1 [shape="doublecircle" label="1"];
+	s2 [shape="doublecircle" label="2"];
+	s3 [shape="doublecircle" label="3"];
+	s4 [shape="doublecircle" label="4"];
+	s0 -> s3 [label="setInitialOwners"];
+	s0 -> s3 [label="getPunk"];
+	s2 -> s1 [label="buyPunk"];
+	s3 -> s4 [label="enterBidForPunk"];
+	s3 -> s4 [label="offerPunkForSaleToAddress"];
+	s3 -> s3 [label="transferPunk"];
+	s3 -> s2 [label="offerPunkForSale"];
+	s4 -> s4 [label="enterBidForPunk"];
+	s4 -> s4 [label="buyPunk"];
+	s4 -> s4 [label="acceptBidForPunk"];
+	s4 -> s4 [label="withdrawBidForPunk"];
+
+__start0 [label="" shape="none" width="0" height="0"];
+__start0 -> s0;
+
+}

@@ -1,0 +1,8 @@
+web3==6.3.0
+slither-analyzer==0.9.3
+alive_progress==3.1.2
+z3-solver==4.12.1.0
+crytic-compile==0.3.1
+alive-progress==3.1.2
+visual-automata==1.1.1
+automata-lib==6.0.2

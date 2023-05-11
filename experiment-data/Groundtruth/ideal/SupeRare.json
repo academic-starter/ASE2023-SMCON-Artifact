@@ -1,0 +1,55 @@
+{
+    "git-repo": "https://github.com/pixura/smart-contracts",
+    "test-cases": "https://github.com/pixura/smart-contracts/blob/master/test/superare.js",
+    "statemachine":{
+        "0":{
+            "addNewToken": "1",
+            "addNewTokenWithEditions": "3"
+        },
+        "1":{
+            "bid": "2",
+            "setSalePrice":"3"
+        },
+        "2":{
+            "bid": "2",
+            "acceptBid":"1",
+            "cancelBid": "1",
+            "setSalePrice": "4"
+        },
+        "3":{
+            "buy": "1",
+            "bid": "4",
+            "setSalePrice":"3"
+        },
+        "4":{
+            "buy": "1",
+            "bid": "4",
+            "acceptBid": "1",
+            "cancelBid": "3",
+            "setSalePrice": "4"
+        }
+    },
+    "test-case-traces": {
+        "addNewToken": {
+            "bid": {
+                "acceptBid": {
+                    "bid": {
+                        "setSalePrice": {
+                            "transfer": {
+                                "bid":{}
+                            }
+                        }
+                    }
+                },
+                "cancelBid": {},
+                "setSalePrice": {
+                    "buy": {}
+                }
+            },
+            "setSalePrice": {
+                "buy": {}
+            }
+        },
+        "addNewTokenWithEditions": {}
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "website": "https://www.cryptokitties.co/",
+    "git-repo": "https://github.com/dapperlabs/cryptokitties-bounty",
+    "test-cases": "https://github.com/dapperlabs/cryptokitties-bounty/tree/master/test",
+    "statemachine": {
+        "0":{
+            "createAuction-5": "1",
+            "createAuction-4": "1"
+        },
+        "1":{
+            "bid": "0",
+            "cancelAuction": "0",
+            "cancelAuctionWhenPaused": "0"
+        }
+    },
+    "test-case-traces": {
+        "createAuction-5": {
+            "bid": {},
+            "cancelAuction": {},
+            "cancelAuctionWhenPaused": {}
+        }
+    }
+}

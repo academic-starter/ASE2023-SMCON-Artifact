@@ -1,0 +1,25 @@
+{
+    "git-repo": "https://github.com/ensdomains/ens/tree/mainnet",
+    "test-case": "https://github.com/ensdomains/ens/blob/mainnet/test/simplehashregistrar_test.js",
+    "address":[],
+    "statemachine": {
+        "0": {
+            "startAuction": ["1", "2"],
+            "startAuctions": ["1", "2"],
+            "startAuctionsAndBid":["1", "2"]
+        },
+        "1": {
+            "startAuction": ["1", "2"],
+            "startAuctions": ["1", "2"],
+            "startAuctionsAndBid": ["1", "2"]
+        },
+        "2": {
+        }
+    },
+    "test-case-traces": {
+        "startAuction":{
+            "startAuction":{},
+            "finalizeAuction": {}
+        }
+    }
+}

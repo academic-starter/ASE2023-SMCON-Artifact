@@ -1,0 +1,52 @@
+[
+    { 
+        "function": "startAuction",
+        "abstract-types": ["bytes32-hash"],
+        "params": ["_hash"], 
+        "state": ["_entries[bytes32-hash]"]
+    },
+    { 
+        "function": "startAuctions",
+        "abstract-types": ["bytes32-hash"],
+        "params": ["_hashes"], 
+        "isArray": true,
+        "state": ["_entries[bytes32-hash]"]
+    },
+    { 
+        "function": "startAuctionsAndBid",
+        "abstract-types": ["bytes32-hash"],
+        "params": ["hashes"], 
+        "isArray": true,
+        "state": ["_entries[bytes32-hash]"]
+    },
+    { 
+        "function": "unsealBid",
+        "abstract-types": ["bytes32-hash"],
+        "params": ["_hash"], 
+        "state": ["_entries[bytes32-hash]"]
+    },
+    { 
+        "function": "finalizeAuction",
+        "abstract-types": ["bytes32-hash"],
+        "params": ["_hash"], 
+        "state": ["_entries[bytes32-hash]"]
+    },
+    { 
+        "function": "transfer",
+        "abstract-types": ["bytes32-hash"],
+        "params": ["_hash"], 
+        "state": ["_entries[bytes32-hash]"]
+    },
+    { 
+        "function": "releaseDeed",
+        "abstract-types": ["bytes32-hash"],
+        "params": ["_hash"], 
+        "state": ["_entries[bytes32-hash]"]
+    },
+    { 
+        "function": "transferRegistrars",
+        "abstract-types": ["bytes32-hash"],
+        "params": ["_hash"], 
+        "state": ["_entries[bytes32-hash]"]
+    }
+]

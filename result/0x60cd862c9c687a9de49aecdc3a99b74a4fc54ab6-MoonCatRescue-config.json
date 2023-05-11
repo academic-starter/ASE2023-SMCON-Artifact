@@ -1,0 +1,69 @@
+[
+    { 
+        "function": "rescueCat",
+        "abstract-types": ["bytes5-catId"],
+        "params": ["rescueOrder[ori(rescueIndex)]"], 
+        "state": ["adoptionOffers[bytes5-catId]", "adoptionRequests[bytes5-catId]", "catNames[bytes5-catId]", "catOwners[bytes5-catId]"]
+    },
+    { 
+        "function": "nameCat",
+        "abstract-types": ["bytes5-catId"],
+        "params": ["catId"], 
+        "state": ["adoptionOffers[bytes5-catId]", "adoptionRequests[bytes5-catId]", "catNames[bytes5-catId]", "catOwners[bytes5-catId]"]
+    },
+    { 
+        "function": "makeAdoptionOffer",
+        "abstract-types": ["bytes5-catId"],
+        "params": ["catId"],
+        "state": ["adoptionOffers[bytes5-catId]", "adoptionRequests[bytes5-catId]", "catNames[bytes5-catId]", "catOwners[bytes5-catId]"]
+    },
+    { 
+        "function": "makeAdoptionOfferToAddress",
+        "abstract-types": ["bytes5-catId"],
+        "params": ["catId"],
+        "state": ["adoptionOffers[bytes5-catId]", "adoptionRequests[bytes5-catId]", "catNames[bytes5-catId]", "catOwners[bytes5-catId]"]
+    },
+    { 
+        "function": "cancelAdoptionOffer",
+        "abstract-types": ["bytes5-catId"],
+        "params": ["catId"],
+        "state": ["adoptionOffers[bytes5-catId]", "adoptionRequests[bytes5-catId]", "catNames[bytes5-catId]", "catOwners[bytes5-catId]"]
+    },
+    { 
+        "function": "acceptAdoptionOffer",
+        "abstract-types": ["bytes5-catId"],
+        "params": ["catId"],
+        "state": ["adoptionOffers[bytes5-catId]", "adoptionRequests[bytes5-catId]", "catNames[bytes5-catId]", "catOwners[bytes5-catId]"]
+    },
+    { 
+        "function": "giveCat",
+        "abstract-types": ["bytes5-catId"],
+        "params": ["catId"],
+        "state": ["adoptionOffers[bytes5-catId]", "adoptionRequests[bytes5-catId]", "catNames[bytes5-catId]", "catOwners[bytes5-catId]"]
+    },
+    { 
+        "function": "makeAdoptionRequest",
+        "abstract-types": ["bytes5-catId"],
+        "params": ["catId"],
+        "state": ["adoptionOffers[bytes5-catId]", "adoptionRequests[bytes5-catId]", "catNames[bytes5-catId]", "catOwners[bytes5-catId]"]
+    },
+    { 
+        "function": "acceptAdoptionRequest",
+        "abstract-types": ["bytes5-catId"],
+        "params": ["catId"],
+        "state": ["adoptionOffers[bytes5-catId]", "adoptionRequests[bytes5-catId]", "catNames[bytes5-catId]", "catOwners[bytes5-catId]"]
+    },
+    { 
+        "function": "cancelAdoptionRequest",
+        "abstract-types": ["bytes5-catId"],
+        "params": ["catId"],
+        "state": ["adoptionOffers[bytes5-catId]", "adoptionRequests[bytes5-catId]", "catNames[bytes5-catId]", "catOwners[bytes5-catId]"]
+    },
+    { 
+        "function": "addGenesisCatGroup",
+        "abstract-types": ["bytes5-catId"],
+        "params": ["rescueOrder[ori(rescueIndex)]"],
+        "range": [0, 16],
+        "state": ["adoptionOffers[bytes5-catId]", "adoptionRequests[bytes5-catId]", "catNames[bytes5-catId]", "catOwners[bytes5-catId]"]
+    }
+]

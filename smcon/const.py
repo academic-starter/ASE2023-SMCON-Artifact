@@ -1,0 +1,3 @@
+VERISOL_USE = False 
+INVARIANT_STYLE = "DAIKON"
+RESULT_DIR = "./result"
