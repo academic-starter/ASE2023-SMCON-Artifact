@@ -1,1 +1,0 @@
-{"states": ["2", "0", "4", "5", "1"], "statemachine": {"0": {"createGame@userGameId[msg.sender]": ["1"]}, "1": {"serverEndGame@userGameId[_userAddress]": ["2"], "serverEndGameConflict@userGameId[_userAddress]": ["5"], "serverCancelActiveGame@userGameId[_userAddress]": ["5"]}, "5": {"serverForceGameEnd@userGameId[_userAddress]": ["4"]}}, "initialState": "0"}
