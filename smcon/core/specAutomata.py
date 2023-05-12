@@ -9,6 +9,7 @@ import re
 from visual_automata.fa.nfa import VisualNFA  
 from multiprocessing import Pool
 import logging
+import random
     
 def getFieldPredicates(predset):
     fieldPredMapping = dict() 
@@ -353,7 +354,7 @@ class Automata:
         states = self.states
         if statetraces is None:
             statetraces = []
-            statetraces.append(states.index(self.initialState))
+            statetraces.append(str(states.index(self.initialState)))
         if len(trace) == 0:
             self.recorded_all_state_traces.append(statetraces)
             return True
@@ -361,8 +362,12 @@ class Automata:
         method, posts = trace[0] 
         if currentState in self.transitions:
                 if method not in self.transitions[currentState]:
+                    # return False
                     raise Exception(f"method {method} is not in the transitions of state {currentState}, invalid trace")
                 for require_item in self.transitions[currentState][method]:
+                    
+                    new_state_traces  = copy.deepcopy(statetraces)
+
                     nextState = require_item[0]
                     requireFlag =  require_item[1]
 
@@ -371,34 +376,56 @@ class Automata:
                         if pred.split(" ")[0].strip() not in fields:
                             preds.remove(pred)
                             trace[0][1].remove(pred) 
-
+                    
                     if isinstance(nextState, str):
                         preds.add(nextState)
                     elif isinstance(nextState, list) or isinstance(nextState, set) or isinstance(nextState, tuple):
                         preds.update(nextState)
                     else:
                         assert False
+                    
+                    if not SMT_SAT(fieldorfileds=fields, preds=preds):
+                        continue
 
                     # check if the the variable of predicate is in the fields
                     # if not, then the predicate is not related to the fields
                     
-                    statetraces.append(method)
-                    statetraces.append(str(states.index(nextState)))
+                    new_state_traces.append(method)
+                    new_state_traces.append(str(states.index(nextState)))
                     require_item[1] = True 
-                    self.promoteTransitionMaybeToRequireByTrace(fields, trace[1:], nextState, statetraces=copy.deepcopy(statetraces))
+                    self.promoteTransitionMaybeToRequireByTrace(fields, trace[1:], nextState, statetraces=new_state_traces)
         return True          
 
     def setEventTraces(self, traces):
         self.event_traces = traces 
 
+    def mergeLeafStates(self):
+        leafStates = set()
+        for state in self.states:
+            if state not in self.transitions or len(self.transitions[state]) == 0:
+                leafStates.add(state)
+        if len(leafStates) == 0:
+            return None
+        
+        new_EndingState = "False"
+        for state in leafStates:
+            assert state != self.initialState
+            new_EndingState = f"Or({new_EndingState}, {state})"
+            self.states.remove(state)
+        
+        self.states.append(new_EndingState)
+        return new_EndingState
+            
+
+
     def determinise(self, pre_invariants, post_invariants):
-        isDeterminstic = True
         for from_state in self.transitions:
             for label in self.transitions[from_state]:
                 pre_condition =  pre_invariants[label]
                 post_condition = post_invariants[label]
                 items = self.transitions[from_state][label]
                 if len(items) > 1:
+                    logging.warning(f"non-deterministic behaviour: {self.states.index(from_state)} --{label}--> {[self.states.index(item[0]) for item in items]}")
                     # non-deterministic behaviour 
                     # determinise it
                     q = translate2Z3exprFromPredSet(post_condition)
@@ -408,21 +435,26 @@ class Automata:
                             continue
                         sub_state = f"Or({sub_state}, {item[0]})"
                     new_q =  f"And({q}, {sub_state})"
+                    # new_q = sub_state
                     self.addState(new_q)
 
-                    for item in items:
+                    candidates = list()
+                    candidates.append(new_q)
+
+                    for item in copy.deepcopy(items):
                         if item[0] == self.initialState:
                             continue 
                         self.states.remove(item[0])
                         item[0] = f"And({item[0]},Not({new_q}))"
-                        self.addState(item[0])
-                    isDeterminstic = False
-                    return isDeterminstic 
-        return isDeterminstic
+                        # self.addState(item[0])
+                        candidates.append(item[0])
+                    
+                    return candidates 
+        return []
 
-    def generate(self, pre_invariants, post_invariants, fieldPredMapping):
+    def generate(self, pre_invariants, post_invariants, fieldPredMapping, workdir):
+        fields = list(fieldPredMapping.keys())
         def myf():
-            fields = list(fieldPredMapping.keys())
             toProcess = list()
             isProcessed = list() 
             all_state_candidates = self.states 
@@ -458,14 +490,17 @@ class Automata:
                                 raise e       
                         bar()
         myf() 
-        max_count = 5 
-        while max_count > 0: 
-            if not self.determinise(pre_invariants=pre_invariants, post_invariants=post_invariants):
-                max_count -= 1
-                myf()
-            else:
-                break 
 
+        self.visitFSM(fields)
+        discarded_states = self.clearAllMaybeTransition()
+        while len(discarded_states) > 0:
+            self.states = [state for state in self.states if state not in discarded_states]
+            myf()
+            self.visitFSM(fields)
+            discarded_states = self.clearAllMaybeTransition()
+
+        # self.print(workdir=workdir)
+    
         return self 
 
     def visitFSM(self, fields):
@@ -485,7 +520,7 @@ class Automata:
         return self 
     
     def checkSpuriousPath(self):
-        def checkLoop(state_trace, q_n, t_n_1):
+        def hasLoop(state_trace, q_n, t_n_1):
             q_n_index = self.states.index(q_n)
             count = 0 
             for i in range(len(state_trace)):
@@ -494,25 +529,58 @@ class Automata:
             if count > 1:
                 return True
             return False
-        
-        for state_trace in self.recorded_all_state_traces:
+        new_recorded_all_state_traces = sorted(self.recorded_all_state_traces, key=lambda x: len(x), reverse=True)
+        for state_trace in new_recorded_all_state_traces:
             q_n = self.states[int(state_trace[-1])]
             if q_n not in self.transitions:
                 continue
-            for t_n_1 in self.transitions[q_n]:
+            t_n_1_s = list(self.transitions[q_n].keys())
+            for t_n_1 in t_n_1_s:
                 for item in self.transitions[q_n][t_n_1]:
                     q_n_1 = item[0]
                     requireFlag = item[1]
+                    pi_n_1 = copy.deepcopy(state_trace)
+                    pi_n_1.extend([t_n_1, str(self.states.index(q_n_1))])
                     if requireFlag == False:
-                        return q_n, t_n_1
+                        return pi_n_1
                     else:
-                        if checkLoop(state_trace, q_n_1, t_n_1):
+                        # check if there is a pi*t_n_1*q_n_1 in the recorded traces 
+                        appear = False
+                        for _state_trace in new_recorded_all_state_traces:
+                            if len(_state_trace) >= len(pi_n_1):
+                                if _state_trace[:len(pi_n_1)] == pi_n_1:
+                                    appear = True
+                                    break
+
+                        if appear is True:
                             continue
                         else:
-                            return q_n, t_n_1
-        return None, None
+                            if hasLoop(state_trace, q_n, t_n_1):
+                                continue
+                            else:
+                                return pi_n_1
+        return None
 
-    def splitAndRemove(self, q_n, t_n_1, fields,  pre_invariants, post_invariants):
+    def splitAndRemove(self, pi_n_1, fields,  pre_invariants, post_invariants):
+
+        def suffix(from_and_method):
+            from_and_method =  " ".join(from_and_method)
+            sufixes =  set()
+            for traces in self.recorded_all_state_traces:
+                content = " ".join(traces)
+                if content.find(from_and_method)!= 0:
+                    sufixes.add(content[content.find(from_and_method):])
+            return sufixes
+
+        logging.warning(f"split and remove {pi_n_1}")
+
+        t_n_1 = pi_n_1[-2]
+        q_n = self.states[int(pi_n_1[-3])]
+
+        REMOVE_TRANSITION = 0
+        REMOVE_STATE = 1 
+        remove_kind = -1
+
         g_m_invs = pre_invariants[t_n_1]
         u_m_invs = post_invariants[t_n_1]
 
@@ -520,12 +588,16 @@ class Automata:
         hat_q_1 = f"And({q_n}, {g_m})"
         hat_q_2 = f"And({q_n}, Not({g_m}))" 
 
-        requireFlag =  all([ not item[1] for item in self.transitions[q_n][t_n_1]]) 
-        if requireFlag == True:
+        requireFlag =  any([item[1] for item in self.transitions[q_n][t_n_1]]) 
+
+        if requireFlag == False:
             # t_n_1 is an unreachable transition
             self.transitions[q_n].pop(t_n_1, None) 
-
+            remove_kind =  REMOVE_TRANSITION
+            logging.warning("remove unreachable transition")
+            return remove_kind           
         elif SMT_SAT(fieldorfileds=fields, preds=hat_q_1) and SMT_SAT(fieldorfileds=fields, preds=hat_q_2):
+            logging.warning("split state into two states (1)")
             self.states.remove(q_n)
             self.addState(hat_q_1)
             self.addState(hat_q_2)
@@ -541,21 +613,39 @@ class Automata:
                 if new_transitions[from_state] == {}:
                     new_transitions.pop(from_state, None)
             self.transitions =  new_transitions
-        
+            remove_kind = REMOVE_STATE
+            return remove_kind
         else:
+            logging.warning("split state into two states (2)")
             # pick any pi_n
             for state_trace in self.recorded_all_state_traces:
-                for i in range(len(state_trace)):
-                    if state_trace[i] == q_n:
+                for i in range(0, len(state_trace)-1, 2):
+                    if str(state_trace[i]) == str(self.states.index(q_n)) and state_trace[i+1] == t_n_1:
                         assert i > 1 
-                        event = self.event_traces[int(i/2)-1]
-                        method, posts = event
-                        Pred = translate2Z3exprFromPredSet(posts)
-                        OnePred = f"And({q_n}, {Pred})"
-                        OtherPred =  f"And({q_n}, Not({Pred}))"
+                        method = state_trace[i-1]
+    
+                        u_m_pre_invs = post_invariants[method]
+
+                        u_m_pre = translate2Z3exprFromPredSet(u_m_pre_invs)
+                        
+                        OnePred = f"And({q_n}, And({u_m_pre}, {g_m}))"
+                        OtherPred1 =  f"And({q_n}, Not(And({u_m_pre}, {g_m})))"
+
+                        candidates = [ OnePred, OtherPred1]
+
+                        feasible_candidates = []
+                        for candidate in candidates:
+                            if SMT_SAT(fieldorfileds=fields, preds=candidate):
+                                feasible_candidates.append(candidate)
+                        
+                        if len(feasible_candidates) < 2:
+                            continue
+
                         self.states.remove(q_n)
-                        self.addState(OnePred)
-                        self.addState(OtherPred)
+                        
+                        for candidate in feasible_candidates:
+                            self.states.append(candidate)
+                        
                         del self.transitions[q_n]
                         new_transitions = copy.deepcopy(self.transitions)
                         for from_state in self.transitions:
@@ -568,13 +658,40 @@ class Automata:
                             if new_transitions[from_state] == {}:
                                 new_transitions.pop(from_state, None)
                         self.transitions =  new_transitions
-        return self 
-        
+                        remove_kind =  REMOVE_STATE 
+                        return remove_kind 
+                    
+            # when there is no pi_n, we need to remove a pi_n_1 using the adjective transitions
+            assert len(pi_n_1) > 2
+            method = pi_n_1[-4]
+            u_m_pre_invs = post_invariants[method]
 
+            u_m_pre = translate2Z3exprFromPredSet(u_m_pre_invs)
+                        
+            OnePred = f"And({q_n}, And({u_m_pre}, {g_m}))"
+            OtherPred1 =  f"And({q_n}, Not(And({u_m_pre}, {g_m})))"
+
+            candidates = [ OnePred, OtherPred1]
+            self.states.remove(q_n)
+            self.states.extend(candidates)
+
+            remove_kind =  REMOVE_STATE
+
+            return remove_kind 
+        
 
     def clearAllMaybeTransition(self):
         remove_num = 0
         new_transitions = copy.deepcopy(self.transitions)
+
+        hitStates =  set()
+        for from_state in self.transitions:
+            for method in self.transitions[from_state]:
+                for item in self.transitions[from_state][method]:
+                    if item[1] == True:
+                        hitStates.add(item[0])
+                        hitStates.add(from_state)
+
         for from_state in self.transitions:
             for method in self.transitions[from_state]:
                 for item in self.transitions[from_state][method]:
@@ -586,16 +703,11 @@ class Automata:
             if len(new_transitions[from_state]) == 0:
                 new_transitions.pop(from_state, None)
         self.transitions = new_transitions
-        hitStates =  set()
-        for from_state in self.transitions:
-            for method in self.transitions[from_state]:
-                for item in self.transitions[from_state][method]:
-                    hitStates.add(item[0])
-                    hitStates.add(from_state)
-        # assert len(hitStates) == len(self.states)
+       
         discarded_states =  list(set(self.states) - set(hitStates))
-        print(f"remove transitions: {remove_num}")
         print(f"remove states: {len(discarded_states)}")
+        print(f"remove transitions: {remove_num}")
+        # self.states = list(hitStates)
         return discarded_states
 
     def addTransition(self, from_state, label, to_state, require=False):
@@ -669,3 +781,4 @@ class Automata:
             "initialState":initialState
         }
         json.dump(result, open(f"{workdir}/FSM-{Automata.printCount}.json", "w"))
+        logging.warning(f"{workdir}/FSM-{Automata.printCount}.json")

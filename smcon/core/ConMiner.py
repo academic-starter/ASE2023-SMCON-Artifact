@@ -154,25 +154,24 @@ class ConMiner:
             fsm.addIntialState(self.initialState)
             return fsm 
             
-        def Construct( pre_invariants, post_invariants, fieldPredMapping, fsm: Automata):
+        def Construct(fields,  pre_invariants, post_invariants, fieldPredMapping, fsm: Automata):
             fsm.addIntialState(self.initialState)
-            fsm.generate(pre_invariants, post_invariants, fieldPredMapping)
+            fsm.generate(pre_invariants, post_invariants, fieldPredMapping, workdir=self.workdir)
             return fsm  
          
         def RmPath(fsm: Automata, traces: list, fields: list, pre_invariants, post_invariants):
-            fsm = fsm.visitFSM(fields)
-            discarded_states = fsm.clearAllMaybeTransition()
-        
-            while len(discarded_states) > 0:
-                for discarded_state in discarded_states:
-                    fsm.states.remove(discarded_state)
-                fsm = fsm.visitFSM(fields)
-                discarded_states = fsm.clearAllMaybeTransition()
-            q_n, t_n_1 = fsm.checkSpuriousPath()
-            if q_n is None and t_n_1 is None:
+            pi_n_1 = fsm.checkSpuriousPath()
+            if pi_n_1 is None:
                 return True, fsm 
-            assert q_n is not None and t_n_1 is not None
-            fsm = fsm.splitAndRemove(q_n, t_n_1, fields, pre_invariants, post_invariants)
+
+            removeKind = fsm.splitAndRemove(pi_n_1, fields, pre_invariants, post_invariants)
+            REMOVE_TRANSITION = 0
+            while removeKind == REMOVE_TRANSITION:
+                pi_n_1 = fsm.checkSpuriousPath()
+                if pi_n_1 is None:
+                    return True, fsm 
+                removeKind = fsm.splitAndRemove(pi_n_1, fields, pre_invariants, post_invariants)
+            
             return False, fsm
 
         def fair_shedule():
@@ -181,22 +180,46 @@ class ConMiner:
             fsm = Init()
             fsm.setEventTraces(traces=traces)
             old_states =  len(fsm.states)
-            Construct(self.pre_invariants, self.post_invariants, self.fieldPredMapping, fsm)
-            
-            stable, fsm = RmPath(fsm, traces, list(self.fieldPredMapping.keys()), self.pre_invariants, self.post_invariants)
-            while not stable and timeout_count > 0:
-                print(old_states, len(fsm.states))
-                if old_states == len(fsm.states):
-                    Construct(self.pre_invariants, self.post_invariants, self.fieldPredMapping, fsm)
-                    fsm.visitFSM(list(self.fieldPredMapping.keys()))
-                    fsm.clearAllMaybeTransition()
-                    break
+            fields = list(self.fieldPredMapping.keys())
 
-                old_states =  len(fsm.states)
-                Construct(self.pre_invariants, self.post_invariants, self.fieldPredMapping, fsm)
-                stable, fsm = RmPath(fsm, traces, list(self.fieldPredMapping.keys()), self.pre_invariants, self.post_invariants)
+            fsm = Construct(fields, self.pre_invariants, self.post_invariants, self.fieldPredMapping, fsm)
+            stable, fsm = RmPath(fsm, traces, fields, self.pre_invariants, self.post_invariants)
+            
+            print(old_states, "->",  len(fsm.states))
+            while not stable and timeout_count > 0:
+                old_states = len(fsm.states)
+                Construct(fields, self.pre_invariants, self.post_invariants, self.fieldPredMapping, fsm)
+                stable, fsm = RmPath(fsm, traces, fields, self.pre_invariants, self.post_invariants)
                 timeout_count -= 1
-            return fsm
+                print(old_states, "->",  len(fsm.states))
+            
+
+            if not stable:
+                Construct(fields, self.pre_invariants, self.post_invariants, self.fieldPredMapping, fsm)
+            else:
+                logging.info("No spurious path found")
+
+            candidates = fsm.determinise(pre_invariants=self.pre_invariants, post_invariants=self.post_invariants)
+        
+            max_count = 3
+            while len(candidates) > 0:
+            # if len(candidates) > 0:
+                for candidate in candidates:
+                    if SMT_SAT(fieldorfileds=fields, preds=candidate):
+                        fsm.addState(candidate)
+                Construct(fields, self.pre_invariants, self.post_invariants, self.fieldPredMapping, fsm)
+                max_count -= 1
+                if max_count == 0:
+                    break 
+                candidates = fsm.determinise(pre_invariants=self.pre_invariants, post_invariants=self.post_invariants)
+
+            if len(candidates) == 0:
+                logging.warning("The final automata is a deterministic automata")
+                # merge the leaf states
+                if fsm.mergeLeafStates() is not None:
+                    Construct(fields, self.pre_invariants, self.post_invariants, self.fieldPredMapping, fsm)
+        
+            return fsm 
 
         fsm = fair_shedule()
         return fsm 
@@ -220,7 +243,7 @@ class ConMiner:
                     field = item["name"]
                     value = item["value"]
                     new_field = field.replace("$", "_")
-                    new_value = value if value is not None else 0
+                    new_value = "\"\"" if value == "" else value if value is not None  else 0
                     state_predicates.append(f"{new_field} == {new_value}")
                 if [event_name, state_predicates] in trace:
                     continue
